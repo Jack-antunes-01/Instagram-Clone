@@ -74,6 +74,10 @@ flutter:
     - assets/images/search_icon.svg
     - assets/images/upload_active_icon.svg
     - assets/images/upload_icon.svg
+    - assets/images/menu.svg
+    - assets/images/add.svg
+    - assets/images/down_arrow.svg
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

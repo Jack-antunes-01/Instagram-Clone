@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram_clone/pages/activity_page.dart';
 import 'package:instagram_clone/pages/home_page.dart';
+import 'package:instagram_clone/pages/profile_page.dart';
 import 'package:instagram_clone/pages/search_page.dart';
 import 'package:instagram_clone/theme/colors.dart';
 
@@ -40,16 +41,7 @@ class _RootAppState extends State<RootApp> {
         ),
       ),
       const ActivityPage(),
-      const Center(
-        child: Text(
-          "Account Page",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      ),
+      const ProfilePage(),
     ];
 
     return IndexedStack(
@@ -100,7 +92,50 @@ class _RootAppState extends State<RootApp> {
     } else if (pageIndex == 4) {
       return AppBar(
         backgroundColor: appBarColor,
-        title: const Text("Account"),
+        title: Row(children: [
+          const Text("Jack_Antunes_01"),
+          const SizedBox(width: 10),
+          SvgPicture.asset(
+            "assets/images/down_arrow.svg",
+            width: 10,
+            color: white,
+          ),
+        ]),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 16,
+              bottom: 16,
+            ),
+            child: InkWell(
+              onTap: () {},
+              child: SvgPicture.asset(
+                "assets/images/add.svg",
+                width: 25,
+                color: white,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 16,
+              bottom: 16,
+            ),
+            child: InkWell(
+              onTap: () {},
+              child: SvgPicture.asset(
+                "assets/images/menu.svg",
+                width: 25,
+                color: white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 15)
+        ],
       );
     } else {
       return AppBar();
