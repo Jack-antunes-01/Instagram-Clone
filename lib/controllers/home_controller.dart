@@ -5,6 +5,8 @@ import 'package:instagram_clone/models/story_model.dart';
 import 'package:instagram_clone/repositories/posts_repository.dart';
 import 'package:instagram_clone/repositories/stories_repository.dart';
 
+import '../enum/app_state.dart';
+
 class HomeController {
   List<PostModel> posts = [];
   List<StoryModel> stories = [];
@@ -14,18 +16,16 @@ class HomeController {
   final PostsRepository _postsRepository = PostsRepository();
   final StoriesRepository _storiesRepository = StoriesRepository();
 
-  final state = ValueNotifier<HomeState>(HomeState.start);
+  final state = ValueNotifier<AppState>(AppState.start);
 
   Future start() async {
-    state.value = HomeState.loading;
+    state.value = AppState.loading;
     try {
       posts = await _postsRepository.fetchPosts();
       stories = await _storiesRepository.fetchStories();
-      state.value = HomeState.success;
+      state.value = AppState.success;
     } catch (e) {
-      state.value = HomeState.error;
+      state.value = AppState.error;
     }
   }
 }
-
-enum HomeState { start, loading, success, error }

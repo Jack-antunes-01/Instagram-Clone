@@ -1,5 +1,5 @@
 class PostModel {
-  int? id;
+  late int? id;
   late String name;
   late String profileImg;
   late String postImg;

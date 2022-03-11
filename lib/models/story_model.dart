@@ -1,5 +1,5 @@
 class StoryModel {
-  int? id;
+  late int? id;
   late String img;
   late String name;
 

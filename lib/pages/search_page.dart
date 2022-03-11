@@ -74,6 +74,11 @@ class _SearchPageState extends State<SearchPage> {
               return Container(
                 width: (size.width - 3) / 3,
                 height: (size.width - 3) / 3,
+                // child: Ink.image(
+                //   image: NetworkImage(searchImages[index]),
+                //   fit: BoxFit.cover,
+                //   // child: InkWell(onTap: () {}),
+                // ),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(searchImages[index]),

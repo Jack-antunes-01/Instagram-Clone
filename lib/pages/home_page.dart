@@ -4,6 +4,7 @@ import 'package:instagram_clone/controllers/home_controller.dart';
 import 'package:instagram_clone/theme/colors.dart';
 import 'package:instagram_clone/widgets/story_item.dart';
 
+import '../enum/app_state.dart';
 import '../widgets/post_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final homeController = HomeController();
+  final _homeController = HomeController();
 
   @override
   void dispose() {
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    homeController.start();
+    _homeController.start();
   }
 
   _start() {
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          homeController.start();
+          _homeController.start();
         },
         child: const Text("Try again"),
       ),
@@ -54,15 +55,15 @@ class _HomePageState extends State<HomePage> {
     return getBody();
   }
 
-  stateManagement(HomeState state) {
+  stateManagement(AppState state) {
     switch (state) {
-      case HomeState.start:
+      case AppState.start:
         return _start();
-      case HomeState.loading:
+      case AppState.loading:
         return _loading();
-      case HomeState.error:
+      case AppState.error:
         return _error();
-      case HomeState.success:
+      case AppState.success:
         return _success();
       default:
         return _start();
@@ -72,9 +73,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: homeController.state,
+      animation: _homeController.state,
       builder: (context, child) {
-        return stateManagement(homeController.state.value);
+        return stateManagement(_homeController.state.value);
       },
     );
   }
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                   image:
-                                      NetworkImage(homeController.profileImg),
+                                      NetworkImage(_homeController.profileImg),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -133,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         width: 70,
                         child: Text(
-                          homeController.profileName,
+                          _homeController.profileName,
                           style: const TextStyle(
                             color: white,
                             overflow: TextOverflow.ellipsis,
@@ -145,10 +146,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Row(
                   children:
-                      List.generate(homeController.stories.length, (index) {
+                      List.generate(_homeController.stories.length, (index) {
                     return StoryItem(
-                      img: homeController.stories[index].img,
-                      name: homeController.stories[index].name,
+                      img: _homeController.stories[index].img,
+                      name: _homeController.stories[index].name,
                     );
                   }),
                 ),
@@ -159,13 +160,13 @@ class _HomePageState extends State<HomePage> {
             color: white.withOpacity(0.3),
           ),
           Column(
-            children: List.generate(homeController.posts.length, (index) {
-              final post = homeController.posts[index];
+            children: List.generate(_homeController.posts.length, (index) {
+              final post = _homeController.posts[index];
               return PostItem(
                 callback: () {
                   setState(() {
-                    homeController.posts[index].isLoved =
-                        !homeController.posts[index].isLoved;
+                    _homeController.posts[index].isLoved =
+                        !_homeController.posts[index].isLoved;
                   });
                 },
                 name: post.name,

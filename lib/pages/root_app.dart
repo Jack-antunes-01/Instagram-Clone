@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram_clone/pages/activity_page.dart';
 import 'package:instagram_clone/pages/home_page.dart';
 import 'package:instagram_clone/pages/search_page.dart';
 import 'package:instagram_clone/theme/colors.dart';
@@ -38,16 +39,7 @@ class _RootAppState extends State<RootApp> {
           ),
         ),
       ),
-      const Center(
-        child: Text(
-          "Likes Page",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: white,
-          ),
-        ),
-      ),
+      const ActivityPage(),
       const Center(
         child: Text(
           "Account Page",
@@ -137,23 +129,25 @@ class _RootAppState extends State<RootApp> {
       width: double.infinity,
       height: 80,
       decoration: const BoxDecoration(color: appFooterColor),
-      child: Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(bottomItems.length, (index) {
-            return InkWell(
-              onTap: () {
-                selectedTab(index);
-              },
-              child: SvgPicture.asset(
-                bottomItems[index],
-                width: 27,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(bottomItems.length, (index) {
+          return InkWell(
+            onTap: () {
+              selectedTab(index);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, top: 15, bottom: 20),
+              child: Ink(
+                child: SvgPicture.asset(
+                  bottomItems[index],
+                  width: 27,
+                ),
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
