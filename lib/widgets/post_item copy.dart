@@ -5,7 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import '../constants/story_json.dart';
 import '../theme/colors.dart';
 
-class PostItem extends StatefulWidget {
+class PostItem extends StatelessWidget {
   final VoidCallback callback;
 
   final String name;
@@ -31,28 +31,9 @@ class PostItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PostItem> createState() => _PostItemState();
-}
-
-class _PostItemState extends State<PostItem> {
-  bool liked = false;
-
-  void likeFn() async {
-    widget.callback();
-    setState(() {
-      liked = true;
-    });
-
-    await Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        liked = false;
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -72,14 +53,14 @@ class _PostItemState extends State<PostItem> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: NetworkImage(widget.profileImg),
+                        image: NetworkImage(profileImg),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   const SizedBox(width: 15),
                   Text(
-                    widget.name,
+                    name,
                     style: const TextStyle(
                       color: white,
                       fontWeight: FontWeight.w500,
@@ -96,28 +77,26 @@ class _PostItemState extends State<PostItem> {
         ),
         const SizedBox(height: 12),
         InkWell(
-          onDoubleTap: () => likeFn(),
+          onDoubleTap: () {
+            callback();
+          },
           child: Stack(
             children: [
               Container(
                 height: 400,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(widget.postImg),
+                    image: NetworkImage(postImg),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                transform: Transform.translate(
-                  offset: Offset((size.width / 2) - 15, liked ? 175 : 275),
-                ).transform,
+              Positioned(
+                left: (size.width / 2) - 15,
+                top: (size.width / 2) - 8,
                 child: SvgPicture.asset(
-                  widget.isLoved
-                      ? "assets/images/loved_icon.svg"
-                      : "assets/images/love_icon.svg",
-                  width: liked ? 50 : 0,
+                  "assets/images/loved_icon.svg",
+                  width: 50,
                 ),
               ),
             ],
@@ -132,9 +111,11 @@ class _PostItemState extends State<PostItem> {
               Row(
                 children: [
                   InkWell(
-                    onTap: () => likeFn(),
+                    onTap: () {
+                      callback();
+                    },
                     child: SvgPicture.asset(
-                      widget.isLoved
+                      isLoved
                           ? "assets/images/loved_icon.svg"
                           : "assets/images/love_icon.svg",
                       width: 27,
@@ -176,7 +157,7 @@ class _PostItemState extends State<PostItem> {
                   ),
                 ),
                 TextSpan(
-                  text: widget.likedBy,
+                  text: likedBy,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -210,14 +191,14 @@ class _PostItemState extends State<PostItem> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: widget.name,
+                  text: name,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 TextSpan(
-                  text: widget.caption,
+                  text: caption,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -245,7 +226,7 @@ class _PostItemState extends State<PostItem> {
                   ),
                 ),
                 TextSpan(
-                  text: widget.commentCount,
+                  text: commentCount,
                   style: TextStyle(
                     color: white.withOpacity(0.5),
                     fontSize: 15,
@@ -327,7 +308,7 @@ class _PostItemState extends State<PostItem> {
         Padding(
           padding: const EdgeInsets.only(right: 15, left: 15),
           child: Text(
-            widget.timeAgo,
+            timeAgo,
             style: TextStyle(
               color: white.withOpacity(0.5),
               fontSize: 15,

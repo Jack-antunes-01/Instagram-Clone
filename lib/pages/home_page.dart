@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:instagram_clone/constants/post_json.dart';
-import 'package:instagram_clone/constants/story_json.dart';
+import 'package:instagram_clone/controllers/home_controller.dart';
 import 'package:instagram_clone/theme/colors.dart';
 import 'package:instagram_clone/widgets/story_item.dart';
 
@@ -15,27 +14,69 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List storiesList = [
-    Container(
-      width: 65,
-      height: 65,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: black,
-          width: 2,
-        ),
-        image: DecorationImage(
-          image: NetworkImage(stories[0]['img']),
-          fit: BoxFit.cover,
-        ),
+  final homeController = HomeController();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    homeController.start();
+  }
+
+  _start() {
+    return Container();
+  }
+
+  _loading() {
+    return const Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(white),
       ),
-    ),
-  ];
+    );
+  }
+
+  _error() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          homeController.start();
+        },
+        child: const Text("Try again"),
+      ),
+    );
+  }
+
+  _success() {
+    return getBody();
+  }
+
+  stateManagement(HomeState state) {
+    switch (state) {
+      case HomeState.start:
+        return _start();
+      case HomeState.loading:
+        return _loading();
+      case HomeState.error:
+        return _error();
+      case HomeState.success:
+        return _success();
+      default:
+        return _start();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return getBody();
+    return AnimatedBuilder(
+      animation: homeController.state,
+      builder: (context, child) {
+        return stateManagement(homeController.state.value);
+      },
+    );
   }
 
   Widget getBody() {
@@ -61,7 +102,8 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: NetworkImage(profile),
+                                  image:
+                                      NetworkImage(homeController.profileImg),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -91,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         width: 70,
                         child: Text(
-                          name,
+                          homeController.profileName,
                           style: const TextStyle(
                             color: white,
                             overflow: TextOverflow.ellipsis,
@@ -102,10 +144,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Row(
-                  children: List.generate(stories.length, (index) {
+                  children:
+                      List.generate(homeController.stories.length, (index) {
                     return StoryItem(
-                      img: stories[index]['img'],
-                      name: stories[index]['name'],
+                      img: homeController.stories[index].img,
+                      name: homeController.stories[index].name,
                     );
                   }),
                 ),
@@ -116,16 +159,23 @@ class _HomePageState extends State<HomePage> {
             color: white.withOpacity(0.3),
           ),
           Column(
-            children: List.generate(posts.length, (index) {
+            children: List.generate(homeController.posts.length, (index) {
+              final post = homeController.posts[index];
               return PostItem(
-                name: posts[index]['name'],
-                profileImg: posts[index]['profileImg'],
-                postImg: posts[index]['postImg'],
-                caption: posts[index]['caption'],
-                isLoved: posts[index]['isLoved'],
-                commentCount: posts[index]['commentCount'],
-                likedBy: posts[index]['likedBy'],
-                timeAgo: posts[index]['timeAgo'],
+                callback: () {
+                  setState(() {
+                    homeController.posts[index].isLoved =
+                        !homeController.posts[index].isLoved;
+                  });
+                },
+                name: post.name,
+                profileImg: post.profileImg,
+                postImg: post.postImg,
+                caption: post.caption,
+                isLoved: post.isLoved,
+                commentCount: post.commentCount,
+                likedBy: post.likedBy,
+                timeAgo: post.timeAgo,
               );
             }),
           ),
